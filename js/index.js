@@ -1,4 +1,5 @@
 // INSPIRADO EN https://www.w3schools.com/howto/howto_js_todolist.asp
+
 /* ------------CLASES:------------ */
 
 class Tiempo {
@@ -10,11 +11,11 @@ class Tiempo {
 }
 class Tarea {
 	static contador = 0
-	constructor(descripcion, tiempo) {
-		// ¿POR QUÉ? contador: Para dar especificidad al momento de individualizar cada tarea (y para así evitar que se borren duplicados).
+	constructor(descripcion) {
+		/** La propiedad "contador" confiere especificidad adicional al momento de individualizar cada tarea (y así evita que se borren duplicados). */
+		this.tiempoDeCreacion = new Tiempo().localDateTime
 		this.contador = ++Tarea.contador
 		this.descripcion = descripcion
-		this.tiempoDeCreacion = tiempo ? tiempo : new Tiempo().localDateTime
 		this.id = `${this.tiempoDeCreacion} - ${this.contador} - ${this.descripcion}`
 		this.completacion = false
 	}
@@ -23,87 +24,81 @@ class Tarea {
 /* -----------FUNCIONES:----------- */
 
 function instanciarObjetoTarea(entrada) {
-	// Descomentar si deseamos impedir que se agreguen tareas vacías:
-	// if (entrada.value) {
-	if (entrada) {
-		const objetoTarea = new Tarea(entrada.value)
-		entrada.value = ""
-		return objetoTarea
-	}
+	const objetoTarea = new Tarea(entrada.value)
+	/** Se asigna un valor de string vacío ("") al campo de entrada, para "reiniciarlo" y permitir que el usuario ingrese una nueva tarea desde 0. */
+	entrada.value = ""
+	return objetoTarea
 }
 
 const crearCheckbox = objetoTarea => {
 	const checkbox = document.createElement("input")
 	checkbox.setAttribute("type", "checkbox")
-	// DESACTIVADO (para testearlo):
-	// checkbox.setAttribute("name", objetoTarea.descripcion)
-	// ¿POR QUÉ? id: Para que la etiqueta pueda identificar y reconocer a su checkbox:
+	/** El atributo "id" permite que la etiqueta pueda identificar y reconocer a su checkbox. */
 	checkbox.id = objetoTarea.id
+	/** Cada vez que se alterne el estado de "tick" del checkbox, hacer que la propiedad "completacion" del objetoTarea refleje el estado nuevo. */
 	checkbox.addEventListener("change", () => objetoTarea.completacion = checkbox.checked)
 	return checkbox
 }
-const crearEtiqueta = (checkbox, objetoTarea) => {
+const crearEtiqueta = (objetoTarea, checkbox) => {
 	const etiqueta = document.createElement("label")
-	// ¿POR QUÉ? for: Para que la etiqueta se aplique a su checkbox respectivo:
+	/** El atributo "for" permite que la etiqueta se aplique a su checkbox respectivo (es decir, aquel cuyo "id" coincida con el "for" de la etiqueta). */
 	etiqueta.setAttribute("for", checkbox.id)
 	etiqueta.innerText = objetoTarea.descripcion
 	return etiqueta
 }
 const crearDeleteBtn = objetoTarea => {
-	// const crearDeleteBtn = () => {
 	const deleteBtn = document.createElement("button")
-	// DESACTIVADO (para testearlo):
-	// ¿POR QUÉ? type: Para evitar que se active su comportamiento por defecto ("submit" dentro de un formulario). 
-	// deleteBtn.setAttribute("type", "button")
-	// DESACTIVADO (para testearlo):
-	// deleteBtn.className = "deleteBtn"
+	/** La "X" es una forma rápida de simbolizar la función de "eliminar tarea" que este botón representa. */
 	deleteBtn.innerText = "X"
 	deleteBtn.addEventListener("click", () => {
+		/** Eliminar tarea del documento HTML: */
 		deleteBtn.parentNode.remove()
-		// Eliminar objetoTarea de arrayDeTareas:
+		/** Eliminar tarea del array de tareas en index.js: */
 		arrayDeTareas = arrayDeTareas.filter(el => el.id !== objetoTarea.id)
-		// Eliminar objetoTarea de Storage:
-		localStorage.removeItem(objetoTarea.id)
+		/** Eliminar tarea del Storage: */
+		sessionStorage.removeItem(objetoTarea.id)
 	})
 	return deleteBtn
 }
 
 function crearTareaHTML(objetoTarea) {
 	const checkbox = crearCheckbox(objetoTarea)
-	const etiqueta = crearEtiqueta(checkbox, objetoTarea)
+	const etiqueta = crearEtiqueta(objetoTarea, checkbox)
 	const deleteBtn = crearDeleteBtn(objetoTarea)
-	// const deleteBtn = crearDeleteBtn()
 
 	const tareaHTML = document.createElement("li")
-	// DESACTIVADO (para testearlo):
-	// tareaHTML.className = "tarea"
 	tareaHTML.append(checkbox, etiqueta, deleteBtn)
 	return tareaHTML
 }
 
 function agregarNuevaTarea(evento, entrada, arrayDeTareas, listaHTML) {
-	// ¿POR QUÉ?
-	// evento.key: Necesito comprobar que la tecla pulsada en el evento "keydown" dentro del "input[type='text']" sea la tecla Enter.
-	// evento.type: Si dejo sólo la condición "evento.key", no podrá ser escuchado el evento "click" del "button" que agrega tareas, porque no pasará la condición mencionada. Por eso, me veo obligado a poner esta segunda condición (alternativa).
+	/** ¿POR QUÉ? 
+	 * evento.key: Necesito comprobar que la tecla pulsada en el evento "keydown" dentro del "input[type='text']" sea la tecla Enter.
 
+	 * evento.type: Si sólo dejo la condición "evento.key", no podrá funcionará el evento "click" del "button" que agrega tareas, porque no pasará la condición mencionada. Por eso, me veo obligado a poner esta segunda condición (alternativa).
+	*/
 	if (evento.key === "Enter" || evento.type === "click") {
+		/** Agregar objetoTarea al arrayDeTareas: */
 		const objetoTarea = instanciarObjetoTarea(entrada)
 		arrayDeTareas.push(objetoTarea)
 
+		/** Adjuntar tareaHTML (elemento "li" creado dinámicamente) al pie de listaHTML (elemento "ul" ya presente en el documento): */
 		const tareaHTML = crearTareaHTML(objetoTarea)
 		listaHTML.appendChild(tareaHTML)
 
-		localStorage.setItem(objetoTarea.id, JSON.stringify(objetoTarea))
+		/** Añadir objetoTarea al Storage: */
+		sessionStorage.setItem(objetoTarea.id, JSON.stringify(objetoTarea))
 	}
 }
 
+// FUNCIONES RELACIONADAS CON "Storage":
 function recuperarObjetosTareaDesdeStorage() {
 	for (let i = 0; i < sessionStorage.length; i++) {
 		const objetoTareaStorage = JSON.parse(sessionStorage.getItem(sessionStorage.key(i)))
-		const objetoTarea = new Tarea(objetoTareaStorage.descripcion,objetoTareaStorage.tiempoDeCreacion)
+		const objetoTarea = new Tarea(objetoTareaStorage.descripcion, objetoTareaStorage.tiempoDeCreacion)
 		lista.push(objetoTarea)
 	}
-	// La función pasada como argumento a "*.sort(*)" debe ser acorde con el tipo de valor que intentamos ordenar (en este caso - objetoTarea.id - , NO una resta, sino que una COMPARACIÓN):
+	/** La función pasada como argumento a "*.sort(*)" debe ser acorde con el tipo de valor que intentamos ordenar (en este caso - objetoTarea.id - , NO una resta, sino que una COMPARACIÓN). */
 	lista.sort((a, b) => a.id < b.id ? -1 : 1)
 	return lista
 }
