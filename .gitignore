@@ -1,3 +1,4 @@
 *.code-workspace
 toDo.md
 old*.js
+node_modules
