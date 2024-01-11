@@ -8,6 +8,8 @@
 	<!-- CSS -->
 	<link rel="stylesheet" href="css/style.css">
 	<!-- JS -->
+	<script defer src="js/clases.js"></script>
+	<script defer src="js/funciones.js"></script>
 	<script defer src="js/index.js"></script>
 
 	<title>Proyecto - Lista de Tareas</title>
@@ -18,8 +20,16 @@
 		<h1>Proyecto - Lista de Tareas</h1>
 	</header>
 	<main>
-		<input type="text" id="entradaDeTexto" name="entradaDeTexto">
-		<button type="button" id="addTaskBtn" >Agregar</button>
+		<p>Presione <kbd>Enter</kbd> para agregar una nueva tarea. </p>
+		<p> Una vez agregada, haga clic en ella para editarla. </p>
+		<menu type="toolbar">
+			<li>
+				<input type="text" id="entradaDeTexto" name="entradaDeTexto">
+			</li>
+			<li>
+				<button type="button" id="addTaskBtn">Agregar</button>
+			</li>
+		</menu>
 		<ul class="listaDeTareas"></ul>
 	</main>
 </body>
