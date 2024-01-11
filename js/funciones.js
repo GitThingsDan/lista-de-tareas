@@ -16,6 +16,7 @@ const crearCheckbox = objetoTarea => {
 const crearEtiqueta = objetoTarea => {
 	/** Inicialmente, consideré usar "label" como elemento para la etiqueta, pero dado que finalmente terminé neutralizando todos los comportamientos por defecto de "label" (".preventDefault()"), decidí que no tenía sentido usarla. Cambié "label" por "span", manteniendo por ahora el nombre de la variable como "etiqueta". */
 	const etiqueta = document.createElement("span")
+	etiqueta.className = "etiqueta"
 	/** El atributo "contenteditable" permite que el texto del elemento sea editable...aunque en este caso, puse como valor "plaintext-only", para así poder copiar y pegar dentro del campo de edición de la etiqueta *sin generar elementos "<br>"*. */
 	etiqueta.setAttribute("contenteditable", "plaintext-only")
 	etiqueta.innerText = objetoTarea.descripcion
@@ -34,13 +35,21 @@ const crearEtiqueta = objetoTarea => {
 /** @param {any[]} arrayDeTareas - Hubiera sido ideal no haber añadido el parámetro "arrayDeTareas" que agregué para mayor dinamismo al aplicar "filter"...por culpa de eso, tuve que también añadir el parámetro a todas las funciones que dependen de esta... 🤦🏻‍♂️ */
 const crearDeleteBtn = (arrayDeTareas, objetoTarea) => {
 	const deleteBtn = document.createElement("button")
+	deleteBtn.className = "deleteBtn"
 	/** La "X" es una forma rápida de simbolizar la función de "eliminar tarea" que este botón representa. */
 	deleteBtn.innerText = "X"
 	deleteBtn.addEventListener("click", () => {
 		/** Eliminar objetoTarea de arrayDeTareas en index.js: 
-		 * (Aquí hay un PROBLEMA: no se están eliminando los "objetoTarea"s de arrayDeTareas cada vez que se elimina una tarea; muy por el contrario, arrayDeTareas sólo se actualiza cuando se recarga el sitio web. Al parecer tiene que ver con la primera invocación que hago: "let arrayDeTareas = recuperarTareasDesdeStorage()".) 
+		 * arrayDeTareas = arrayDeTareas.filter(el => el.id !== objetoTarea.id)
+		 * 
+		 * (Aquí hay un PROBLEMA: no se están eliminando los "objetoTarea"s de arrayDeTareas cada vez que se elimina una tarea; muy por el contrario, arrayDeTareas sólo se actualiza cuando se recarga el sitio web. Al parecer tiene que ver con la primera invocación que hago: "let arrayDeTareas = recuperarTareasDesdeStorage()". NO, MENTIRA: NO TIENE QUE VER CON ESO - acabo de comprobarlo -.) 
+		 * 
+		 * Edit: Sí funciona el filtrado; el PROBLEMA es que no es acumulativo.
+		 * 
+		 * Edit N°2: PROFESORES: perdón por usar el método ".splice()" antes de que ustedes nos lo enseñaran...es que este problema realmente me estaba desesperando... u.u
 		 */
-		arrayDeTareas = arrayDeTareas.filter(el => el.id !== objetoTarea.id)
+		let idx = arrayDeTareas.indexOf(objetoTarea)
+		arrayDeTareas.splice(idx, 1)
 		/** Eliminar tareaHTML del DOM: */
 		deleteBtn.parentNode.remove()
 		/** Eliminar tareaJSON de Storage: */
@@ -57,6 +66,7 @@ function crearTareaHTML(arrayDeTareas, objetoTarea) {
 	const deleteBtn = crearDeleteBtn(arrayDeTareas, objetoTarea)
 
 	const tareaHTML = document.createElement("li")
+	tareaHTML.className = "tarea"
 	tareaHTML.append(checkbox, etiqueta, deleteBtn)
 	return tareaHTML
 }
