@@ -3,13 +3,59 @@ body {
 
 	& *:not(button, input) {
 		color: white;
+		/* Para debugging de estilos: */
+		/* border: thin solid red; */
+	}
 
-		& ul {
+	& header h1 {
+		text-align: center;
+	}
+
+	& main {
+		& p {
+			text-align: center;
+			font-size: larger;
+		}
+
+		& menu, ul {
+			display: flex;
 			list-style-type: none;
 			padding: 0;
+		}
 
-			& input[type="checkbox"]:checked~label {
-				text-decoration-line: line-through;
+		& menu {
+			justify-content: center;
+		}
+
+		& ul {
+			/* *NO* "column-reverse", porque buscaremos suplir esa otra funcionalidad como parte de un "botón de filtros y ordenaciones": */
+			flex-direction: column;
+			align-items: center;
+
+			& li {
+				display: flex;
+				align-items: center;
+				margin: 10px 0;
+				& input[type="checkbox"] {
+					scale: 2;
+					&:checked ~ .etiqueta {
+						/* Cuando el checkbox esté "checked: true", tachar el texto de su etiqueta ("span"): */
+						text-decoration-line: line-through;
+					}
+				}
+
+				& .etiqueta {
+					font-size: larger;
+					text-align: center;
+					display: inline-block;
+					min-width: 100px;
+					max-width: 300px;
+					margin: 0 10px;
+				}
+
+				& .deleteBtn {
+					height: fit-content;
+				}
 			}
 		}
 	}
