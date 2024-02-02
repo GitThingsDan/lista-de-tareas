@@ -6,31 +6,32 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<!-- CSS -->
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 	<link rel="stylesheet" href="css/style.css">
 	<!-- JS -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 	<script defer src="js/clases.js"></script>
 	<script defer src="js/funciones.js"></script>
 	<script defer src="js/index.js"></script>
 
-	<title>Proyecto - Lista de Tareas</title>
+	<title>Lista de Tareas</title>
 </head>
 
 <body>
 	<header>
-		<h1>Proyecto - Lista de Tareas</h1>
+		<h1>Lista de Tareas</h1>
 	</header>
 	<main>
-		<p>Presione <kbd>Enter</kbd> para agregar una nueva tarea. </p>
-		<p> Una vez agregada, haga clic en ella para editarla. </p>
-		<menu type="toolbar">
+		<menu>
 			<li>
-				<input type="text" id="entradaDeTexto" name="entradaDeTexto">
+				<input type="text" id="textInput" name="textInput">
 			</li>
 			<li>
 				<button type="button" id="addTaskBtn">Agregar</button>
 			</li>
 		</menu>
-		<ul class="listaDeTareas"></ul>
+		<ul class="taskList"></ul>
 	</main>
 </body>
 
