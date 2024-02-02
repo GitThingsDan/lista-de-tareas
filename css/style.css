@@ -1,60 +1,53 @@
+/* Para debugging de estilos: */
+/* * {
+	border: thin solid red;
+} */
+
 body {
 	background-color: black;
 
-	& *:not(button, input) {
+	*:not(input, button) {
 		color: white;
-		/* Para debugging de estilos: */
-		/* border: thin solid red; */
-	}
-
-	& header h1 {
 		text-align: center;
 	}
 
-	& main {
-		& p {
-			text-align: center;
-			font-size: larger;
+	main {
+
+		menu,
+		.taskList {
+			padding-left: 0;
 		}
 
-		& menu, ul {
+		menu li {
+			display: inline-block;
+		}
+
+		.taskList {
 			display: flex;
-			list-style-type: none;
-			padding: 0;
-		}
-
-		& menu {
-			justify-content: center;
-		}
-
-		& ul {
-			/* *NO* "column-reverse", porque buscaremos suplir esa otra funcionalidad como parte de un "botón de filtros y ordenaciones": */
+			/* *NO* "column-reverse", porque buscaremos suplir aquella funcionalidad mediante botones para "ordenar" y para "filtrar" tareas: */
 			flex-direction: column;
 			align-items: center;
 
-			& li {
+			.task {
 				display: flex;
 				align-items: center;
 				margin: 10px 0;
-				& input[type="checkbox"] {
-					scale: 2;
-					&:checked ~ .etiqueta {
-						/* Cuando el checkbox esté "checked: true", tachar el texto de su etiqueta ("span"): */
+
+				.taskCheckBox {
+					height: 20px;
+					width: 20px;
+
+					&:checked ~ .taskDescription {
+						/* Cuando la check box esté "checked: true", tachar el texto de su descripción */
 						text-decoration-line: line-through;
 					}
 				}
 
-				& .etiqueta {
+				.taskDescription {
 					font-size: larger;
-					text-align: center;
-					display: inline-block;
-					min-width: 100px;
-					max-width: 300px;
 					margin: 0 10px;
-				}
-
-				& .deleteBtn {
-					height: fit-content;
+					max-width: 300px;
+					min-width: 100px;
 				}
 			}
 		}
