@@ -1,0 +1,30 @@
+[
+	{
+		"tiempoDeCreacion": "",
+		"contador": 1,
+		"id": "1",
+		"descripcion": "Presione 'Enter' para agregar una nueva tarea.",
+		"completacion": false
+	},
+	{
+		"tiempoDeCreacion": "",
+		"contador": 2,
+		"id": "2",
+		"descripcion": "Una vez agregada, haga clic en ella para editarla.",
+		"completacion": false
+	},
+	{
+		"tiempoDeCreacion": "",
+		"contador": 3,
+		"id": "3",
+		"descripcion": "Haga clic en la check box para marcar/desmarcar la tarea como completada.",
+		"completacion": true
+	},
+	{
+		"tiempoDeCreacion": "",
+		"contador": 4,
+		"id": "4",
+		"descripcion": "Por último, haga clic en 'X' para eliminar la tarea.",
+		"completacion": false
+	}
+]
