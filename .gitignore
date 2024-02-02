@@ -1,5 +1,4 @@
 *.code-workspace
-toDo.md
-old*.js
 node_modules
 package*.json
+toDo.md
