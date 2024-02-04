@@ -14,6 +14,7 @@
  * , cuya propiedad `checked` está vinculada con `tareaObjeto.completacion` por asignación.
  */
 const crearCheckBoxTarea = tareaObjeto => {
+	/** Un elemento `input type="checkbox"` vinculado a una tarea. @type {HTMLInputElement} */
 	const checkBox = document.createElement("input")
 
 	checkBox.type = "checkbox"
@@ -45,6 +46,7 @@ const crearDescripcionTarea = tareaObjeto => {
 	/* 
 	Inicialmente, consideré usar "label" como elemento para la descripción, pero dado que finalmente terminé neutralizando todos los comportamientos por defecto de "label" (mediante ".preventDefault()"), decidí que no tenía sentido usarla. Además, sentí que caería en el error de usar un elemento HTML para otro fin, distinto al propósito con que fue ideado. Por todo esto, cambié "label" por "span", y también modifiqué el nombre original de la variable, "etiqueta", por "descripcion":
 	*/
+	/** Un elemento `span` destinado a ser la descripción de una tarea. @type {HTMLSpanElement} */
 	const descripcion = document.createElement("span")
 
 	descripcion.className = "taskDescription"
@@ -83,7 +85,7 @@ const eliminarTarea = (arrayDeTareas, tareaObjeto, botonEliminarTarea) => {
 		cancelButtonColor: "#d33",
 		confirmButtonText: "Sí, eliminar",
 		cancelButtonText: "No, cancelar",
-		showClass: { popup: "animate__animated animate__zoomIn animate__faster" },
+		showClass: { popup: "animate__animated animate__zoomIn" },
 	})
 
 	/** 
@@ -111,7 +113,7 @@ const eliminarTarea = (arrayDeTareas, tareaObjeto, botonEliminarTarea) => {
 		if (resultado.isConfirmed) {
 			// 1.- Eliminar tareaObjeto de arrayDeTareas (en index.js).
 			const idx = arrayDeTareas.indexOf(tareaObjeto)
-			arrayDeTareas.splice(idx, 1)
+			if (idx) arrayDeTareas.splice(idx, 1)
 			// 2.- Eliminar del DOM la tarea correspondiente (elemento "li" que contiene a botonEliminarTarea).
 			botonEliminarTarea.parentElement?.remove()
 			// 3.- Eliminar tareaObjeto de Storage.
@@ -135,7 +137,7 @@ const eliminarTarea = (arrayDeTareas, tareaObjeto, botonEliminarTarea) => {
 }
 /** 
  * Crea un elemento `button` cuya finalidad es eliminar su tarea correspondiente.
- * @param {Tarea[]} arrayDeTareas Un array con instancias de la clase {@link Tarea|`Tarea`}, obtenidas desde {@link Storage|`Storage`} o desde un archivo JSON.
+ * @param {Tarea[]} arrayDeTareas Un array con instancias de la clase {@link Tarea|`Tarea`}, obtenidas desde {@link Storage|`Storage`} o desde un {@link jsonFilePath|archivo JSON}/un objeto {@link Response|`Response`} con un array de 1 tarea preparado en caso de error de {@link fetch|`fetch()`} del {@link jsonFilePath|archivo JSON}.
  * @param {Tarea} tareaObjeto Una instancia de la clase {@link Tarea|`Tarea`}. 
  * @returns {HTMLButtonElement}
  * ```js
@@ -165,7 +167,7 @@ const crearBotonEliminarTarea = function (arrayDeTareas, tareaObjeto) {
  * - La {@link crearDescripcionTarea|descripción} - editable - de una tarea.
  * - Un {@link crearBotonEliminarTarea|botón para eliminarla}.
  *
- * @param {Tarea[]} arrayDeTareas Un array con instancias de la clase {@link Tarea|`Tarea`}, obtenidas desde {@link Storage|`Storage`} o desde un archivo JSON.
+ * @param {Tarea[]} arrayDeTareas Un array con instancias de la clase {@link Tarea|`Tarea`}, obtenidas desde {@link Storage|`Storage`} o desde un {@link jsonFilePath|archivo JSON}/un objeto {@link Response|`Response`} con un array de 1 tarea preparado en caso de error de {@link fetch|`fetch()`} del {@link jsonFilePath|archivo JSON}.
  * @param {Tarea} tareaObjeto Una instancia de la clase {@link Tarea|`Tarea`}. 
  * @returns {HTMLLIElement}
  * ```html
@@ -201,7 +203,7 @@ function crearTareaHTML(arrayDeTareas, tareaObjeto) {
  * Crea y agrega una tarea nueva al arrayDeTareas, al documento HTML, y a {@link Storage|`Storage`}.
  * @param {HTMLInputElement} entrada Elemento `input type="text"` en que se tipea la descripción de la tarea que se desea crear. Antes de ejecutar la función, se valida primero que este campo de edición no esté vacío en cuanto a caracteres visibles. 
  * @param {Event} evento Evento a escuchar. En paralelo a la condición mencionada para el {@link entrada|parámetro anterior}, esta función se ejecutará sólo si se trata de un evento {@link GlobalEventHandlersEventMap.click|`click`} en el botón "Agregar", o si se presionó la tecla `Enter` dentro del {@link entrada|campo de edición principal para crear tareas}.
- * @param {Tarea[]} arrayDeTareas Un array con instancias de la clase {@link Tarea|`Tarea`}, obtenidas desde {@link Storage|`Storage`} o desde un archivo JSON.
+ * @param {Tarea[]} arrayDeTareas Un array con instancias de la clase {@link Tarea|`Tarea`}, obtenidas desde {@link Storage|`Storage`} o desde un {@link jsonFilePath|archivo JSON}/un objeto {@link Response|`Response`} con un array de 1 tarea preparado en caso de error de {@link fetch|`fetch()`} del {@link jsonFilePath|archivo JSON}.
  * @param {HTMLUListElement} lista Elemento `ul` que contiene a todas las tareas creadas y agregadas a este.
  */
 function agregarNuevaTarea(entrada, evento, arrayDeTareas, lista) {
@@ -223,7 +225,8 @@ function agregarNuevaTarea(entrada, evento, arrayDeTareas, lista) {
 		// 3.- Guardar en Storage la tareaObjeto recién creada:
 		localStorage.setItem(tareaObjeto.id, JSON.stringify(tareaObjeto))
 
-		// Por último, asignar un valor de string vacío ("") al campo de entrada, para así "reiniciarlo" y permitir que el usuario pueda ingresar una nueva tarea desde 0:
+		// Por último, asignar un valor de string vacío ("") al campo de entrada (para así "reiniciarlo" y permitir que el usuario pueda ingresar una nueva tarea desde 0), y devolver el foco al campo de edición (ya que al presionar el botón "Agregar", automáticamente se pierde el foco del campo de edición):
 		entrada.value = ""
+		if (evento.type === "click") entrada.focus()
 	}
 }

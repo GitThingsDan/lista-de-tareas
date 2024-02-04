@@ -1,3 +1,8 @@
+:root {
+	/* Para animaciones de sweetalert2 mediante Animate.css: */
+	--animate-duration: 0.2s;
+}
+
 body {
 	* {
 		&:not(input, button) {
