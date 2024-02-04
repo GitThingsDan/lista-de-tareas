@@ -109,12 +109,6 @@ const eliminarTarea = (arrayDeTareas, tareaObjeto, botonEliminarTarea) => {
 	confirmacion.then((resultado) => {
 		// Si el usuario confirmó que sí desea eliminar la tarea (es decir, si no hizo clic en el botón de "No, cancelar"):
 		if (resultado.isConfirmed) {
-			/*
-			// 1.- Eliminar tareaObjeto de arrayDeTareas (en index.js).
-			arrayDeTareas = arrayDeTareas.filter(el => el.id !== tareaObjeto.id)
-			// Hay un problema con esta metodología (método ".filter()"): no se están eliminando las tareaObjeto de arrayDeTareas cada vez que se hace clic en el botón; muy por el contrario, arrayDeTareas sólo se actualiza cuando se recarga la página web. Si bien el filtrado funciona, no es acumulativo (y, al parecer, tampoco es inmediato).
-			// La solución que se me ocurrió (si bien no es una alternativa que nos hayan enseñado en clases) es usar otro método: ".splice()".
-			*/
 			// 1.- Eliminar tareaObjeto de arrayDeTareas (en index.js).
 			const idx = arrayDeTareas.indexOf(tareaObjeto)
 			arrayDeTareas.splice(idx, 1)

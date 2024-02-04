@@ -1,14 +1,10 @@
-/* Para debugging de estilos: */
-/* * {
-	border: thin solid red;
-} */
-
 body {
 	* {
 		&:not(input, button) {
 			font-family: Georgia, 'Times New Roman', Times, serif;
 			text-align: center;
-		};
+		}
+
 		button {
 			font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 		}
@@ -27,7 +23,6 @@ body {
 
 		.taskList {
 			display: flex;
-			/* *NO* "column-reverse", porque buscaremos suplir aquella funcionalidad mediante botones para "ordenar" y para "filtrar" tareas: */
 			flex-direction: column;
 			align-items: center;
 
