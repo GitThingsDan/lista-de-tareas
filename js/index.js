@@ -1,15 +1,31 @@
-/* INSPIRADO EN https://www.w3schools.com/howto/howto_js_todolist.asp */
+// @ts-check
+"use strict"
 
-const arrayDeTareas = recuperarTareasDesdeStorage()
+// INSPIRADO EN https://www.w3schools.com/howto/howto_js_todolist.asp
 
-const listaHTML = document.getElementsByTagName("ul")[0]
-ordenarYAnexarTareasRecuperadasAHTML(arrayDeTareas, listaHTML)
+/**
+ * Un array con instancias de la clase {@link Tarea|`Tarea`}, obtenidas desde {@link Storage|`Storage`} o desde un archivo JSON.
+ * @type {Tarea[]} 
+ */
+const arrayDeTareas = await recuperarTareas("js/tareasPorDefecto.json")
+/**
+ * Elemento `ul` que contiene a todas las tareas creadas y agregadas a este.
+ * @type {HTMLUListElement}
+ */
+const lista = document.getElementsByTagName("ul")[0]
+ordenarTareasRecuperadasYAnexarlasAHTML(arrayDeTareas, lista)
 
-const entrada = document.querySelector("input[type='text']")
-entrada.addEventListener("keydown", evento => agregarNuevaTarea(evento, entrada, arrayDeTareas, listaHTML))
+/**
+ * Elemento `input type="text"` en que se tipea la descripción de la tarea que se desea crear.
+ * @type {HTMLInputElement}
+ */
+const entrada = document.getElementsByTagName("input")[0]
+entrada.addEventListener("keydown", evento => agregarNuevaTarea(entrada, evento, arrayDeTareas, lista))
+/**
+ * Botón para agregar una nueva tarea, de la cual se haya tipeado su descripción en el {@link entrada|campo de edición} contiguo a este.
+ * @type {HTMLButtonElement}
+ */
+const boton = document.getElementsByTagName("button")[0]
+boton.addEventListener("click", evento => agregarNuevaTarea(entrada, evento, arrayDeTareas, lista))
 
-const boton = document.querySelector("button#addTaskBtn")
-boton.addEventListener("click", evento => agregarNuevaTarea(evento, entrada, arrayDeTareas, listaHTML))
-
-// Esta línea de código es para asegurarme de que el contador no tome valores menores que 0 o mayores que la longitud del arrayDeTareas, pero la dejaré comentada por ahora porque creo que es algo "hacky", y no me gusta la idea de usar la fuerza bruta para machacar los problemas del código, o poner cosas de las que no estoy seguro *qué* son:
-// localStorage.setItem("Contador", arrayDeTareas.length)
+export { }
